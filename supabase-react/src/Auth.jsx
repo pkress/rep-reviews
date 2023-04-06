@@ -9,7 +9,10 @@ export default function Auth() {
     event.preventDefault();
 
     setLoading(true);
-    const { error } = await supabase.auth.signInWithOtp({ email });
+    const { error } = await supabase.auth.signInWithOtp({ 
+      email,
+      options: {emailRedirectTo: 'cows.com'}
+     });
 
     if (error) {
       alert(error.error_description || error.message);
