@@ -2,6 +2,7 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import Auth from './Auth';
+import Home from './Home';
 import Account from './Account';
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
       {!session ? (
         <Auth />
       ) : (
-        <Account key={session.user.id} session={session} />
+        <Home key={session.user.id} session={session} />
       )}
     </div>
   );
