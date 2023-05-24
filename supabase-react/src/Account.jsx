@@ -46,7 +46,7 @@ export default function Account({ session }) {
       username,
       website,
       avatar_url,
-      full_name,
+      // full_name,
       updated_at: new Date(),
     };
 

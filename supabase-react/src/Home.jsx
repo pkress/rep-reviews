@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Routes ,Route, Router } from 'react-router-dom';
 import { supabase } from './supabaseClient';
 import Account from './Account';
+import Form from './Form';
 
 export default function Home({ session } ) {
     const [loading, setLoading] = useState(true);
@@ -36,12 +37,8 @@ export default function Home({ session } ) {
             <label className="welcome sign" >
                 {"Welcome to the home page, " + username + "!" }
             </label>
-        </div> 
-        <Router>
-            <Routes> {/* The Switch decides which component to show based on the current URL.*/}
-                <Route  path='/Account' component={<Account key={session.user.id} session={session} />}></Route >
-            </Routes>
-        </Router>
+            < Form />
+        </div>  
     </div>
   );
 }
