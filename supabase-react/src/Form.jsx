@@ -6,16 +6,17 @@ function Form() {
     
   const [loading, setLoading] = useState(true);
   const [response, setResponse] = useState(null);
-  const [album, setAlbum] = useState(null);
+  const [album, setAlbum] = useState('album_name');
 
-  
   useEffect(() => {
     async function getAlbum() {
       setLoading(true);
 
       let { data, error } = await supabase
         .from('albums')
-        .select(`id, album_name`); //, artist_name, release_date, album_photo_id`)  
+        .select(`id, album_name`)
+        .eq('id', 1)
+        .single();   
 
       if (error) {
         console.warn(error);
@@ -35,7 +36,7 @@ function Form() {
       <form>
       <fieldset>
          <label>
-           <p>Album name: {album}</p>
+           <p>{'Album name: ' + album}</p>
            <input review="review..." />
          </label> 
        </fieldset>
