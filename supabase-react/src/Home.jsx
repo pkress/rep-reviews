@@ -3,6 +3,7 @@ import { Routes ,Route, Router } from 'react-router-dom';
 import { supabase } from './supabaseClient';
 import Account from './Account';
 import Form from './Form';
+import ReleaseSubmissionForm from './ReleaseSubmissionForm';
 
 export default function Home({ session } ) {
     const [loading, setLoading] = useState(true);
@@ -37,7 +38,7 @@ export default function Home({ session } ) {
             <label className="welcome sign" >
                 {"Welcome to the home page, " + username + "!" }
             </label>
-            < Form />
+            < ReleaseSubmissionForm session={session} />
         </div>  
     </div>
   );
