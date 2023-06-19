@@ -27,7 +27,7 @@ function Form() {
       setLoading(false);
     }
 
-    getAlbum();
+    // getAlbum();
   });
 
   return (
