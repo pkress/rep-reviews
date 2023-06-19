@@ -6,7 +6,12 @@ import { supabase } from './supabaseClient';
 function ReleaseSubmissionForm({ session }) {
   // Define variables
   const { user } = session; 
-  console.log(process.env.REACT_APP_SPOTIFY_CLIENT_ID)
+  const { spClientId } = "595ff6d980974507a79c38d8b9fac153";
+  const { spClientSecret } = "01d94dbb161e4868ab1fa3cca4302f23";
+  
+  
+  const { spApiBaseUrl } = "https://api.spotify.com/v1"; 
+  const { spReleaseID } = "4aawyAB9vmqN3uQ7FjRGTy"
 
   const [loading, setLoading] = useState(true);
   const [release, setRelease] = useState("");
@@ -62,14 +67,20 @@ function ReleaseSubmissionForm({ session }) {
 
 
     // Function to get release date from Spotify URL
-    // function getReleaseDate(url) {
+    // function getReleaseDate() {
+    //   const params = new URLSearchParams();
+    //   params.append("client_id", spClientId);
+
     //   useEffect(() => {
-    //     fetch('https://api.example.com/data')
-    //       .then(response => response.json())
-    //       .then(json => setSpReleaseDate(json))
-    //       .catch(error => console.error(error));
+    //     spApiRelaseUrl=spApiBaseUrl + '/albums/'+spReleaseID
+    //     console.log(spApiRelaseUrl)
+    //     // fetch()
+    //     //   .then(response => response.json())
+    //     //   .then(json => setSpReleaseDate(json))
+    //     //   .catch(error => console.error(error));
     //   }, []);
     // }
+    // getReleaseDate();
 
     // Check if release date is valid (between last last friday and most recent friday)
     // const release_date = getReleaseDate(url)
