@@ -13,6 +13,7 @@ function ReleaseSubmissionForm({ session }) {
   const { spReleaseID } = "4aawyAB9vmqN3uQ7FjRGTy"
   
   // Define hooks
+  const [spAccessToken, setSpAccessToken] = useState(null);
   const [spData, setSpData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [release, setRelease] = useState("");
@@ -80,11 +81,25 @@ function ReleaseSubmissionForm({ session }) {
     }
     getSubmissionCount();
   }, [user]);
-
+  
   async function submitRelease(event) {
     
     event.preventDefault();
     setLoading(true); 
+
+    function getAccessToken() {
+      console.log('getting access token')
+
+      // Get output from node backend 
+      fetch("http://localhost:3001/api")
+        .then((res) => {
+          console.log(res)
+          // res.json()
+        })
+        // .then((data) => setSpAccessToken(data.message));
+ 
+      console.log('Sp access token: ' + spAccessToken)
+    }
 
     // Function to get release date from Spotify URL
     function getReleaseDate() {
@@ -101,28 +116,30 @@ function ReleaseSubmissionForm({ session }) {
       myHeaders.append("Authorization", `Basic ${Buffer.from(spClientId+":"+spClientSecret).toString('base64')}`);
       myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
       console.log(`Basic ${Buffer.from(spClientId+":"+spClientSecret).toString('base64')}`)
-
-      fetch('https://accounts.spotify.com/api/token', {
-        method: 'POST', 
-        redirect: "follow",
-        body: urlencoded,
-        headers: myHeaders}
-        )
-        .then(response => response.json())
-        .then((usefulData) => {
-          console.log(usefulData);
-          setLoading(false);
-          setSpData(usefulData);
-        })
-        .catch((e) => {
-          console.error(`An error occurred: ${e}`)
-        });
+      setSpData({'test': 'test'})
+      // fetch('https://accounts.spotify.com/api/token', {
+      //   method: 'POST', 
+      //   redirect: "follow",
+      //   body: urlencoded,
+      //   headers: myHeaders}
+      //   )
+      //   .then(response => response.json())
+      //   .then((usefulData) => {
+      //     console.log(usefulData);
+      //     setLoading(false);
+      //     setSpData(usefulData);
+      //   })
+      //   .catch((e) => {
+      //     console.error(`An error occurred: ${e}`)
+      //   });
       // fetch()
       //   .then(response => response.json())
       //   .then(json => setSpReleaseDate(json))
       //   .catch(error => console.error(error));
       } 
+    getAccessToken();
     getReleaseDate();
+    console.log(spData);
     // console.log(spData[0]);
 
     // Check if release date is valid (between last last friday and most recent friday)
