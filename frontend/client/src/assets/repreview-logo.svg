@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Outer record circle -->
+  <circle cx="16" cy="16" r="15" fill="black"/>
+  
+  <!-- Record grooves -->
+  <circle cx="16" cy="16" r="12" fill="none" stroke="white" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="16" cy="16" r="9" fill="none" stroke="white" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="16" cy="16" r="6" fill="none" stroke="white" stroke-width="0.5" opacity="0.3"/>
+  
+  <!-- Plus sign -->
+  <rect x="15" y="10" width="2" height="12" fill="white"/>
+  <rect x="10" y="15" width="12" height="2" fill="white"/>
+</svg>
