@@ -7,6 +7,10 @@ const axios = require("axios");
 const qs = require("querystring");
 const crypto = require('crypto');
 
+// Import email services
+const emailScheduler = require('./services/emailScheduler');
+const emailRoutes = require('./routes/emailRoutes');
+
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3001;
@@ -32,6 +36,9 @@ const generateRandomString = (length) => crypto.randomBytes(length).toString('he
 app.get("/api", (req, res) => {
   res.json({ message: "Hello from server!" });
 });
+
+// Register email routes
+app.use('/api/email', emailRoutes);
 
 // Endpoint to get Spotify access token (User with refresh token)
 app.get('/api/spAccessTokenUser',  async (req, res) => {
@@ -99,59 +106,6 @@ app.get("/api/spAccessTokenClient", (req, res) => {
   })(); 
 });
 
-// Spotify Authorization code
-// app.get('/login', function(req, res) {
-
-//   var state = generateRandomString(16);
-//   var scope = 'user-read-private user-read-email playlist-modify-public playlist-modify-private';
-
-//   res.redirect('https://accounts.spotify.com/authorize?' +
-//     qs.stringify({
-//       response_type: 'code',
-//       client_id: spClientId,
-//       scope: scope,
-//       redirect_uri: redirect_uri,
-//       state: state
-//     }));
-// });
-
-// app.get('/callback', async (req, res) => {
-//   const code = req.query.code || null;
-//   const state = req.query.state || null;
-
-//   if (!code || !state) {
-//     return res.redirect('/error?error=state_mismatch');
-//   }
-
-//   try {
-//     const tokenResponse = await axios.post(
-//       'https://accounts.spotify.com/api/token',
-//       qs.stringify({
-//         code: code,
-//         redirect_uri: redirect_uri,
-//         grant_type: 'authorization_code',
-//       }),
-//       {
-//         headers: {
-//           Authorization: `Basic ${Buffer.from(`${spClientId}:${spClientSecret}`).toString('base64')}`,
-//           'Content-Type': 'application/x-www-form-urlencoded',
-//         },
-//       }
-//     );
-
-//     const { access_token, refresh_token } = tokenResponse.data;
-
-//     // Store tokens securely (e.g., session, database)
-//     console.log('Access Token:', access_token);
-//     console.log('Refresh Token:', refresh_token);
-
-//     res.redirect(`/api/spAccessToken?access_token=${access_token}&refresh_token=${refresh_token}`);
-//   } catch (error) {
-//     console.error('Error exchanging code for token:', error.message);
-//     res.redirect('/error?error=token_exchange_failed');
-//   }
-// }); 
-  
 // Endpoint to create a playlist and add tracks
 app.post('/create-playlist', async (req, res) => {
   // console.log('Request:', req);
@@ -214,6 +168,10 @@ app.post('/create-playlist', async (req, res) => {
     res.status(500).json({ error: 'Failed to create playlist' });
   }
 });
+
+// Initialize email scheduler when server starts
+emailScheduler.scheduleReminders();
+console.log('Email scheduler initialized');
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
