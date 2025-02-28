@@ -15,7 +15,7 @@ export default function Account() {
   const [spotify_username, setSpotifyUsername] = useState('');
   const [emailNotifications, setEmailNotifications] = useState(true);
   
-  const session = useSession();  
+  const session = useSession();    
 
   useEffect(() => {
     if (session) {
