@@ -1,7 +1,9 @@
+// pages/AccountPage.jsx
+
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import Avatar from '../components/Avatar';
+import EmailPreferences from '../components/EmailPreferences';
 import { useSession } from '../context/SessionProvider';
 
 export default function Account() {
@@ -11,6 +13,7 @@ export default function Account() {
   const [full_name, setFullName] = useState('');
   const [lastfm_username, setLastfmUsername] = useState('');
   const [spotify_username, setSpotifyUsername] = useState('');
+  const [emailNotifications, setEmailNotifications] = useState(true);
   
   const session = useSession();  
 
@@ -32,7 +35,8 @@ export default function Account() {
           avatar_url, 
           full_name, 
           lastfm_username,
-          spotify_username
+          spotify_username,
+          email_notifications
         `)
         .eq('id', user.id)
         .single();
@@ -47,6 +51,7 @@ export default function Account() {
         setFullName(data.full_name);
         setLastfmUsername(data.lastfm_username || '');
         setSpotifyUsername(data.spotify_username || '');
+        setEmailNotifications(data.email_notifications !== false); // Default to true if not set
       }
     } catch (error) {
       console.warn(error);
@@ -69,6 +74,7 @@ export default function Account() {
         full_name,
         lastfm_username: lastfm_username || null,
         spotify_username: spotify_username || null,
+        email_notifications: emailNotifications,
         updated_at: new Date(),
       };
 
@@ -97,14 +103,17 @@ export default function Account() {
   return (
     <div className="container max-w-2xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">Profile Settings</h1>
+      
+      {/* Email Notification Preferences */}
+      <EmailPreferences 
+        emailNotifications={emailNotifications} 
+        userId={session.user.id}
+        onUpdate={(newValue) => setEmailNotifications(newValue)}
+      />
+      
       <form onSubmit={updateProfile} className="space-y-6">
         <div className="flex flex-col md:flex-row gap-8">
           <div className="flex-1 space-y-6">
-            <div className="mt-6">
-              <Link to={`/user/${username}`} className="text-blue-500 hover:underline">
-                View your public profile
-              </Link>
-            </div> 
             <div>
               <label className="block text-gray-400 mb-2" htmlFor="email">
                 Email

@@ -1,0 +1,134 @@
+# Rep-Reviews Email Notification System
+
+This system sends automated email notifications to users of the Rep-Reviews platform:
+- Friday reminder emails for submitting new music releases
+- Tuesday reminder emails for completing review assignments
+
+## Setup Instructions
+
+### 1. Install Dependencies
+
+```bash
+# Navigate to backend directory
+cd backend
+
+# Install dependencies
+npm install
+```
+
+### 2. Environment Variables
+
+Create a `.env` file in the backend directory with the following variables:
+
+```
+# Server configuration
+PORT=3001
+
+# Supabase credentials
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_SERVICE_KEY=your_supabase_service_key
+
+# Spotify API credentials
+SPCLIENTID=your_spotify_client_id
+SPCLIENTSECRET=your_spotify_client_secret
+SPREFRESHTOKEN=your_spotify_refresh_token
+SPUSERID=your_spotify_user_id
+
+# Email configuration
+ZEPTOMAIL_USER=your_zeptomail_token
+ZEPTOMAIL_API_KEY=your_zeptomail_api_key
+EMAIL_FROM=your_email@yourdomain.com
+ADMIN_API_KEY=create_a_secure_random_string_for_admin_routes
+
+# TimeZone for email scheduling
+TIMEZONE=America/New_York
+```
+
+### 3. Database Setup
+
+Run the following SQL commands in your Supabase SQL editor:
+
+```sql
+-- Add email notifications column to profiles table
+ALTER TABLE profiles 
+ADD COLUMN email_notifications BOOLEAN DEFAULT TRUE;
+
+-- Create table to track email history if you want to avoid sending duplicates
+CREATE TABLE email_notifications (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users(id) NOT NULL,
+  notification_type VARCHAR(50) NOT NULL,
+  sent_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  email_to VARCHAR(255) NOT NULL,
+  subject TEXT NOT NULL,
+  status VARCHAR(50) NOT NULL,
+  error_message TEXT
+);
+
+-- Create index for faster queries on email history
+CREATE INDEX idx_email_notifications_user_id ON email_notifications(user_id);
+CREATE INDEX idx_email_notifications_sent_at ON email_notifications(sent_at);
+```
+
+### 4. Start the Server
+
+```bash
+# Start in development mode with auto-restart
+npm run dev
+
+# Start in production mode
+npm start
+```
+
+## Testing the Email System
+
+### Test Endpoints
+
+The following endpoints can be used to test the email system:
+
+1. **Send a test email:**
+   ```
+   POST /api/email/send-test-email
+   
+   Headers:
+   admin-key: your_admin_api_key
+   
+   Body:
+   {
+     "email": "your@email.com",
+     "type": "release" // or "review"
+   }
+   ```
+
+2. **Manually trigger Friday reminders:**
+   ```
+   POST /api/email/trigger-friday-reminders
+   
+   Headers:
+   admin-key: your_admin_api_key
+   ```
+
+3. **Manually trigger Tuesday reminders:**
+   ```
+   POST /api/email/trigger-tuesday-reminders
+   
+   Headers:
+   admin-key: your_admin_api_key
+   ```
+
+## Email Preferences in Frontend
+
+The front-end includes a toggle component in the user's account settings to enable/disable email notifications.
+
+## Schedule Details
+
+- Friday emails are sent at 10:00 AM (configured timezone)
+- Tuesday emails are sent at 10:00 AM (configured timezone)
+
+You can adjust the schedule by modifying the cron expressions in `server/services/emailScheduler.js`.
+
+## Troubleshooting
+
+- **Emails not sending**: Check Zeptomail logs and credentials
+- **Schedule not working**: Verify server timezone settings
+- **Users not receiving emails**: Check email preferences in database
