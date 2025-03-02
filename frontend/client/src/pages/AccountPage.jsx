@@ -12,7 +12,7 @@ export default function Account() {
   const [lastfm_username, setLastfmUsername] = useState('');
   const [spotify_username, setSpotifyUsername] = useState('');
   
-  const session = useSession();  
+  const session = useSession();    
 
   useEffect(() => {
     if (session) {
