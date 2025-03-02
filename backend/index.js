@@ -160,7 +160,7 @@ app.post('/create-playlist', async (req, res) => {
           { headers: { Authorization: `Bearer ${accessToken}` } }
         );
       } 
-    }
+    } 
 
     res.status(200).json({ message: 'Playlist created successfully', playlistId });
   } catch (error) {
