@@ -49,10 +49,27 @@ export const getLastFriday = (referenceDate = new Date()) => {
    * @param {Date} dateToCheck - The date to validate
    * @returns {boolean} True if date is valid
    */
-  export const isDateInLastWeek = (dateToCheck) => {
-    const date = new Date(Date.UTC(dateToCheck.getUTCFullYear(), dateToCheck.getUTCMonth(), dateToCheck.getUTCDate()));
-    const lastFriday = getLastFriday();
-    const lastLastFriday = getLastLastFriday();
-    
-    return date > lastLastFriday && date <= lastFriday;
-  };
+export const isDateInLastWeek = (dateToCheck) => {
+  // Convert string to Date if needed
+  const inputDate = typeof dateToCheck === 'string' 
+  ? new Date(dateToCheck) 
+  : dateToCheck;
+
+  // Validate the date
+  if (!(inputDate instanceof Date) || isNaN(inputDate.getTime())) {
+    console.error('Invalid date provided to isDateInLastWeek:', dateToCheck);
+    return false;
+  }
+
+  // Now we can safely use Date methods
+  const date = new Date(Date.UTC(
+    inputDate.getFullYear(), 
+    inputDate.getMonth(), 
+    inputDate.getDate()
+  ));
+
+  const lastFriday = getLastFriday();
+  const lastLastFriday = getLastLastFriday();
+
+  return date > lastLastFriday && date <= lastFriday;
+}
