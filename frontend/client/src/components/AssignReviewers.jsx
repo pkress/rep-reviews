@@ -1,6 +1,7 @@
 
 import { React, useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient'; 
+import { getLastFriday, dateFormatters } from '../utils/dateUtils';
 
 function AssignReviewers({ session }) {
   // Define constants
@@ -11,21 +12,7 @@ function AssignReviewers({ session }) {
   // Define hooks 
   const [loading, setLoading] = useState(false); 
     
-  // DEFINE FUNCTIONS
-  // Function to get week of releases
-  function getLastFriday() {
-    const d = new Date(); 
-    const dayOfWeek = d.getDay();   
-    const diff = (dayOfWeek < 5) ? (7 - 5 + dayOfWeek ) : (dayOfWeek - 5);
-
-    var friday = d; 
-    friday.setDate(friday.getDate()-diff);   
- 
-    return friday.toDateString();
-  } 
-
-  // GET KEY VALUES  
-
+  // DEFINE FUNCTIONS 
   // KEY FUNCTION
 
   // Function to submit a release to the database for the week
@@ -33,19 +20,17 @@ function AssignReviewers({ session }) {
     
     setLoading(true); 
 
-    const last_friday = getLastFriday()
-    console.log("week: "+last_friday)
+    const last_friday = getLastFriday() 
     // Get Submissions 
     let { data, error } = await supabase
       .from('release_submissions')
       .select(`release_id`)
-      .eq('release_week', new Date(Date.parse(last_friday)).toISOString())
+      .eq('release_week', dateFormatters.toISOString(last_friday))
       .order('release_id')
 
     // Randomly assign a release to user
     const rand = Math.floor(Math.random() * data.length); 
-    const assigned_release = data[rand]['release_id']; 
-    console.log("random assignment: release "+rand+" -- "+assigned_release)
+    const assigned_release = data[rand]['release_id'];  
      
     // Submit that assignment 
     const assignment = {

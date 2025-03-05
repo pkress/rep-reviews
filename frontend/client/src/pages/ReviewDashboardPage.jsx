@@ -22,8 +22,8 @@ const ReviewDashboard = () => {
   const getDashboardContent = () => {
     // Check if it's submission time (Friday - Sunday)
     const dayOfWeek = new Date().getDay();  
-    // const isSubmissionTime = (dayOfWeek >= 5 || dayOfWeek == 0);
-    const isSubmissionTime = false;
+    const isSubmissionTime = (dayOfWeek >= 5 || dayOfWeek == 0);
+    // const isSubmissionTime = false; 
 
     if (isSubmissionTime) {
       return (

@@ -3,6 +3,7 @@ import Release from './Release';
 import ReviewSummary from './ReviewSummary';
 import { supabase } from '../supabaseClient';
 import { useViewMode } from '../context/ViewModeContext';
+import { dateFormatters } from '../utils/dateUtils';
 
 // Separate component for displaying review stats
 const WeeklyStats = ({ data }) => {
@@ -32,8 +33,8 @@ const WeeklyStats = ({ data }) => {
 export default function ReportSummary({ releaseWeek, canViewLatest }) {
   const [weeklyData, setWeeklyData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { viewMode } = useViewMode();
-
+  const { viewMode } = useViewMode(); 
+  
   useEffect(() => {
     async function fetchWeeklyData() {
       setLoading(true);
@@ -53,7 +54,7 @@ export default function ReportSummary({ releaseWeek, canViewLatest }) {
               release_week
             )
           `)
-          .eq('release_week', releaseWeek);
+          .eq('release_week', dateFormatters.toISOString(new Date(releaseWeek)));
 
         if (error) throw error;
 

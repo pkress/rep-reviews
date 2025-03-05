@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
+import { getLastFriday, dateFormatters } from '../utils/dateUtils';
 
 export const useDashboardState = (session) => {
   const [loading, setLoading] = useState(true);
@@ -23,17 +24,18 @@ export const useDashboardState = (session) => {
           setUsername(profile.username);
 
           // Get last Friday
-          const lastFriday = getLastFriday();
+          const lastFriday = getLastFriday(); 
  
           // Get assignments
           const { data: assignmentData, error: assignmentError } = await supabase
             .from('release_assignments')
-            .select('release_id, is_completed, release_week, user_id')
-
+            .select('release_id, is_completed, release_week, user_id')  
+ 
+          // Get the releases week with the user and week of release
           const userAssignments = assignmentData
             .filter(assignment => assignment.user_id === session.user.id)
-            .filter(assignment => assignment.release_week === lastFriday);
-          
+            .filter(assignment => assignment.release_week === dateFormatters.toISOString(lastFriday));
+            
           if (userAssignments.length === 0) {
             setAssignment(null);
           } else {
@@ -58,11 +60,4 @@ export const useDashboardState = (session) => {
     submissionCount
   };
 };
-
-// Helper function
-const getLastFriday = () => {
-  const d = new Date();
-  const diff = d.getDay() < 5 ? d.getDay() + 2 : d.getDay() - 5;
-  d.setDate(d.getDate() - diff);
-  return d.toISOString().split('T')[0];
-};
+ 
