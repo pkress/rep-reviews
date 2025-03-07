@@ -3,6 +3,7 @@ import { supabase } from '../supabaseClient';
 import ReportSummary from '../components/ReportSummary';
 import PlaylistManager from '../components/PlaylistManager';
 import { useSession } from '../context/SessionProvider';
+import { dateFormatters } from '../utils/dateUtils';
 
 export default function ReportsPage() {
   const [availableWeeks, setAvailableWeeks] = useState([]);
@@ -27,7 +28,7 @@ export default function ReportsPage() {
       // Deduplicate weeks and ensure correct UTC date handling
       const uniqueWeeks = data.filter(
         (week, index, self) => {
-          // Add time component for UTC handling
+          // Add time component for UTC handling 
           week.release_week = week.release_week + 'T00:00:00Z';
           return index === self.findIndex((t) => t.release_week === week.release_week);
         }
@@ -45,24 +46,28 @@ export default function ReportsPage() {
   // Check permissions and fetch releases when week changes
   useEffect(() => {
     async function checkPermissionAndFetchReleases() {
-      if (!session || !selectedWeek) return;
-
+      if (!session || !selectedWeek) return; 
       // Check if user has reviewed for selected week
       const { data: reviewData, error: reviewError } = await supabase
         .from('reviews')
-        .select('review_id')
-        .eq('release_week', selectedWeek)
+        .select(`
+          review_id, 
+          releases!inner (
+            release_week
+          )
+        `)
+        .eq('releases.release_week', dateFormatters.toISOString(new Date(selectedWeek)))
         .eq('user_id', session.user.id);
 
       const hasPermission = !reviewError && reviewData.length > 0;
-      setCanViewLatestWeek(hasPermission || selectedWeek !== availableWeeks[0]?.release_week);
+      setCanViewLatestWeek(hasPermission || dateFormatters.toISOString(new Date(selectedWeek)) !== availableWeeks[0]?.release_week);
 
       // Fetch releases if user has permission
       if (hasPermission || selectedWeek !== availableWeeks[0]?.release_week) {
         const { data: releases, error: releasesError } = await supabase
           .from('releases')
           .select('spotify_id')
-          .eq('release_week', selectedWeek);
+          .eq('release_week', dateFormatters.toISOString(new Date(selectedWeek)));
 
         if (!releasesError) {
           setWeeklyReleases(releases);
@@ -102,9 +107,8 @@ export default function ReportsPage() {
             {availableWeeks.map((week) => (
               <option key={week.release_week} value={week.release_week}>
                 {(() => {
-                  const date = new Date(week.release_week);
-                  date.setDate(date.getDate() + 1);
-                  return date.toLocaleDateString();
+                  const date = dateFormatters.toISOString(new Date(week.release_week));
+                  return date;
                 })()}
               </option>
             ))}
@@ -114,7 +118,7 @@ export default function ReportsPage() {
         {/* Playlist Section */}
         {(canViewLatestWeek || selectedWeek !== availableWeeks[0]?.release_week) && (
           <PlaylistManager
-            playlistName={`Weekly Release - ${new Date(selectedWeek).toISOString().split('T')[0]}`}
+            playlistName={`Weekly Release - ${dateFormatters.toISOString(new Date(selectedWeek))}`}
             releaseData={weeklyReleases}
             className="mb-6 p-4 bg-gray-800 rounded-lg"
           />

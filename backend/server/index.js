@@ -145,7 +145,8 @@ app.get("/api/spAccessTokenClient", (req, res) => {
 //     console.log('Access Token:', access_token);
 //     console.log('Refresh Token:', refresh_token);
 
-//     res.redirect(`/api/spAccessToken?access_token=${access_token}&refresh_token=${refresh_token}`);
+//     // res.redirect(`/api/spAccessToken?access_token=${access_token}&refresh_token=${refresh_token}`);
+//     res.redirect(`/api/refresh_token=${refresh_token}`);
 //   } catch (error) {
 //     console.error('Error exchanging code for token:', error.message);
 //     res.redirect('/error?error=token_exchange_failed');
