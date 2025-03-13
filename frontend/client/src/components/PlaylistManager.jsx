@@ -82,8 +82,7 @@ const PlaylistManager = ({
   };
 
   return (
-    <div className={`playlist-manager ${className}`}>
-      <h2 className="text-lg font-semibold mb-2">Weekly Playlist</h2>
+    <div className={`playlist-manager ${className}`}> 
       {loading ? (
         <p className="text-gray-400">Generating playlist...</p>
       ) : error ? (
