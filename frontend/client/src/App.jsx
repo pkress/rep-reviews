@@ -9,6 +9,7 @@ import Release from './pages/ReleasePage';
 import User from './pages/UserPage';
 import ReviewDashboard from './pages/ReviewDashboardPage';
 import Reports from './pages/ReportsPage';
+import HomePage from './pages/HomePage'; // Import the new HomePage component
 import Navbar from './components/Navbar';
 import { useSession } from './context/SessionProvider';
 
@@ -32,9 +33,9 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/auth" element={!session ? <Auth /> : <Navigate to="/dashboard" replace />} />
+        <Route path="/" element={<HomePage />} /> {/* New homepage route */}
         
         {/* Protected routes */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <ReviewDashboard />
