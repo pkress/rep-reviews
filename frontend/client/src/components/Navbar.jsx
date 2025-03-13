@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, User, Library, BarChart2 } from 'lucide-react';
+import { Home, User, Library, BarChart2, Music } from 'lucide-react';
 import { useViewMode } from '../context/ViewModeContext';
 
 const Navbar = () => {
@@ -12,10 +12,11 @@ const Navbar = () => {
   };
 
   const navItems = [
-    { path: '/dashboard', label: 'Review Dashboard', icon: Home },
-    { path: '/account', label: 'Account', icon: User },
+    { path: '/', label: 'Home', icon: Home },
+    { path: '/dashboard', label: 'Dashboard', icon: Music },
     { path: '/all-releases', label: 'All Releases', icon: Library },
-    { path: '/reports', label: 'Reports', icon: BarChart2 }
+    { path: '/reports', label: 'Reports', icon: BarChart2 },
+    { path: '/account', label: 'Account', icon: User }
   ];
 
   const toggleViewMode = () => {
@@ -25,7 +26,7 @@ const Navbar = () => {
   return (
     <header className="navbar">
       <div className="container">
-        <Link to="/dashboard" className="nav-brand">
+        <Link to="/" className="nav-brand">
           <h1>Rep-Reviews</h1>
         </Link>
 
@@ -41,7 +42,7 @@ const Navbar = () => {
             ))}
             <li>
               <button onClick={toggleViewMode} className="nav-link">
-                {viewMode === 'grid' ? 'Switch to List View' : 'Switch to grid View'}
+                {viewMode === 'grid' ? 'List View' : 'Grid View'}
               </button>
             </li>
           </ul>

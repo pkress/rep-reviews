@@ -763,3 +763,245 @@ select:focus {
 @media (min-width: 1024px) {
   .lg\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
 }
+
+/* Homepage Styles */
+.home-hero {
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.home-hero h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, var(--color-primary), #38BDF8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (min-width: 768px) {
+  .home-hero h1 {
+    font-size: 3rem;
+  }
+}
+
+.home-hero p {
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  max-width: 36rem;
+  margin: 0 auto 2rem;
+}
+
+.home-cta {
+  margin-top: 2rem;
+}
+
+.home-cta a {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 500;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.home-cta a:hover {
+  background-color: #4F46E5;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.home-features {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 768px) {
+  .home-features {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feature-card {
+  background-color: var(--color-surface);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  margin: 0 auto 1rem;
+}
+
+.feature-icon.blue {
+  background-color: rgba(96, 165, 250, 0.2);
+}
+
+.feature-icon.purple {
+  background-color: rgba(167, 139, 250, 0.2);
+}
+
+.feature-icon.indigo {
+  background-color: rgba(129, 140, 248, 0.2);
+}
+
+.feature-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.feature-desc {
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.how-it-works {
+  background-color: rgba(31, 41, 55, 0.5);
+  border: 1px solid rgba(75, 85, 99, 0.5);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  margin-bottom: 4rem;
+  backdrop-filter: blur(8px);
+}
+
+.how-it-works h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .steps {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.step {
+  position: relative;
+  text-align: center;
+}
+
+.step-number {
+  background-color: var(--color-primary);
+  color: white;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.step-title {
+  font-weight: 500;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.step-desc {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.step-line {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  width: 100%;
+  height: 1px;
+  background-color: rgba(75, 85, 99, 0.5);
+  transform: translateX(50%);
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .step-line {
+    display: block;
+  }
+}
+
+.step:last-child .step-line {
+  display: none;
+}
+
+/* Button styles that work with your existing theme */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #4F46E5;
+}
+
+.btn-secondary {
+  background-color: var(--color-surface);
+  color: white;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-hover);
+}
+
+.btn-icon {
+  margin-right: 0.5rem;
+}
+
+/* Background gradient for the homepage */
+.bg-gradient {
+  background: linear-gradient(to bottom, #111827, #1F2937);
+  min-height: 100vh;
+}

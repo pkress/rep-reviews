@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { getLastFriday, dateFormatters } from '../utils/dateUtils';
 
 const SubmitReview = ({ session }) => {
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [assignment, setAssignment] = useState(null);
   const [formData, setFormData] = useState({
     score: '',
@@ -19,6 +21,8 @@ const SubmitReview = ({ session }) => {
     if (!session) return;
     
     setLoading(true);
+    setError(null);
+    
     try {
       // Get last Friday's date
       const lastFriday = getLastFriday();
@@ -38,14 +42,22 @@ const SubmitReview = ({ session }) => {
           )
         `)
         .eq('release_week', lastFridayISO)
-        .eq('user_id', session.user.id)
-        .single();
+        .eq('user_id', session.user.id);
 
       if (assignmentError) throw assignmentError;
-      setAssignment(assignmentData);
+      
+      // Handle case where no assignment exists
+      if (!assignmentData || assignmentData.length === 0) {
+        setAssignment(null);
+        setError('No assignment found for this week.');
+        return;
+      }
+      
+      setAssignment(assignmentData[0]);
       
     } catch (error) {
       console.error('Error fetching assignment:', error);
+      setError('Failed to load your assignment. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -54,7 +66,7 @@ const SubmitReview = ({ session }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.recommend === null) {
+    if (formData.recommend === null) {
       alert('Please select whether you recommend this release');
       return;
     }
@@ -65,6 +77,8 @@ const SubmitReview = ({ session }) => {
     }
 
     setLoading(true);
+    setError(null);
+    
     try {
       // Create review
       const review = {
@@ -98,7 +112,7 @@ const SubmitReview = ({ session }) => {
       
     } catch (error) {
       console.error('Error submitting review:', error);
-      alert('Failed to submit review. Please try again.');
+      setError('Failed to submit review. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -112,10 +126,37 @@ const SubmitReview = ({ session }) => {
     );
   }
 
+  if (error) {
+    return (
+      <div className="bg-red-900/30 border border-red-600 text-red-200 px-4 py-3 rounded-lg relative mb-6">
+        <p className="font-semibold mb-2">Error</p>
+        <p>{error}</p>
+        {error.includes('No assignment') && (
+          <div className="mt-4">
+            <Link 
+              to="/dashboard" 
+              className="text-red-100 underline"
+              onClick={() => window.location.reload()}
+            >
+              Refresh Dashboard
+            </Link>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   if (!assignment) {
     return (
-      <div className="text-center p-4">
-        <p>No assignment found for this week.</p>
+      <div className="text-center p-4 bg-gray-800 rounded-lg">
+        <p className="text-gray-300 mb-4">No assignment found for this week.</p>
+        <Link 
+          to="/dashboard" 
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition"
+          onClick={() => window.location.reload()}
+        >
+          Return to Dashboard
+        </Link>
       </div>
     );
   }
