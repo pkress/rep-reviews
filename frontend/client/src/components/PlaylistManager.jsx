@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getSpotifyAccessTokenUser, checkPlaylistExists } from '../utils/spotifyUtils';
 import axios from 'axios';
+const apiBaseUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
 
 const PlaylistManager = ({ 
   playlistName, 
@@ -63,7 +64,7 @@ const PlaylistManager = ({
 
       // Get access token and create playlist
       const accessToken = await getSpotifyAccessTokenUser();
-      const response = await axios.post('http://localhost:3001/create-playlist', {
+      const response = await axios.post(`${apiBaseUrl}/api/create-playlist`, {
         accessToken,
         playlistName: formattedPlaylistName,
         releaseData: formattedReleaseData,
