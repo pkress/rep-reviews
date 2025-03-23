@@ -65,11 +65,7 @@ const WeekSelector = ({ weeks, selectedWeek, onChange }) => {
       >
         {weeks.map((week) => (
           <option key={week.release_week} value={week.release_week}>
-            Week of {new Date(week.release_week).toLocaleDateString('en-US', { 
-              month: 'long', 
-              day: 'numeric', 
-              year: 'numeric' 
-            })}
+            Week ending on Friday, {dateFormatters.toISOString(new Date(week.release_week))}
           </option>
         ))}
       </select>
