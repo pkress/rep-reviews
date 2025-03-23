@@ -13,18 +13,42 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
  
-// Website you wish to allow to connect
-app.use(cors({ 
-  origin: ['https://mellifluous-dieffenbachia-df7b1a.netlify.app', 'https://repreviews.org', 'http://localhost:5173'] 
-}));
-app.use(express.json());
-
 // Spotify API credentials
 const spClientId = process.env.SPCLIENTID  
 const spClientSecret = process.env.SPCLIENTSECRET 
 const spRefreshToken = process.env.SPREFRESHTOKEN
 const spUserID = process.env.SPUSERID
 const auth_token = Buffer.from(spClientId + ":" + spClientSecret).toString("base64");  
+
+// Define allowed origins for your application
+const allowedOrigins = [
+  'https://mellifluous-dieffenbachia-df7b1a.netlify.app', 
+  'https://repreviews.org', 
+  'http://localhost:5173'
+];
+
+// Custom middleware to validate request origins before processing requests
+const validateOrigin = (req, res, next) => {
+  const origin = req.headers.origin || req.headers.referer;
+  
+  // Check if request has an origin or referer header and if it's in our allowed list
+  const isAllowedOrigin = origin && allowedOrigins.some(allowed => origin.startsWith(allowed));
+  
+  if (!isAllowedOrigin && req.path.includes('/api/sp')) {
+    // Block unauthorized access to Spotify API endpoints
+    console.warn(`Blocked unauthorized access attempt from: ${origin || 'Unknown origin'}`);
+    return res.status(403).json({ error: 'Access denied: Invalid origin' });
+  }
+  
+  // If origin is valid or it's not a sensitive endpoint, proceed
+  next();
+};
+
+app.use(cors({ 
+  origin: allowedOrigins
+}));
+app.use(express.json());
+app.use(validateOrigin);
 
 // Basic welcome response
 app.get("/api", (req, res) => {
