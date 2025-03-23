@@ -4,9 +4,11 @@
  * Get client credentials access token for non-user-specific API calls
  * @returns {Promise<string>} Access token
  */
+const apiBaseUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+
 export const getSpotifyAccessTokenClient = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/spAccessTokenClient");
+      const response = await fetch(`${apiBaseUrl}/api/spAccessTokenClient`);
       const data = await response.json();
       return data.message;
     } catch (error) {
@@ -21,7 +23,7 @@ export const getSpotifyAccessTokenClient = async () => {
  */
 export const getSpotifyAccessTokenUser = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/spAccessTokenUser");
+      const response = await fetch(`${apiBaseUrl}/api/spAccessTokenUser`);
       const data = await response.json();
       return data.message;
     } catch (error) {
@@ -90,7 +92,7 @@ export const getSpotifyAccessTokenUser = async () => {
    * @returns {Promise<boolean>} Whether playlist exists
    */
     export const checkPlaylistExists = async (playlistName) => {
-        const userId = '129804046';
+        const userId = import.meta.env.VITE_SP_USER_ID;
         const accessToken = await getSpotifyAccessTokenClient();
         try {
             const response = await fetch(
