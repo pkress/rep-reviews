@@ -14,8 +14,9 @@ const PORT = process.env.PORT || 3001;
 const app = express();
  
 // Website you wish to allow to connect
-// app.use(cors({ origin: 'http://localhost:5173' })) ; 
-app.use(cors()); 
+app.use(cors({ 
+  origin: ['https://mellifluous-dieffenbachia-df7b1a.netlify.app', 'https://repreviews.org', 'http://localhost:5173'] 
+}));
 app.use(express.json());
 
 // Spotify API credentials
@@ -24,7 +25,7 @@ const spClientSecret = process.env.SPCLIENTSECRET
 const spRefreshToken = process.env.SPREFRESHTOKEN
 const spUserID = process.env.SPUSERID
 const auth_token = Buffer.from(spClientId + ":" + spClientSecret).toString("base64"); 
-const redirect_uri = 'http://localhost:3001/callback'; 
+const redirect_uri = process.env.REDIRECT_URI || 'http://localhost:3001/callback'; 
 
 const generateRandomString = (length) => crypto.randomBytes(length).toString('hex');
 
@@ -98,60 +99,6 @@ app.get("/api/spAccessTokenClient", (req, res) => {
     res.json({ message:sp_auth_token });
   })(); 
 });
-
-// Spotify Authorization code
-// app.get('/login', function(req, res) {
-
-//   var state = generateRandomString(16);
-//   var scope = 'user-read-private user-read-email playlist-modify-public playlist-modify-private';
-
-//   res.redirect('https://accounts.spotify.com/authorize?' +
-//     qs.stringify({
-//       response_type: 'code',
-//       client_id: spClientId,
-//       scope: scope,
-//       redirect_uri: redirect_uri,
-//       state: state
-//     }));
-// });
-
-// app.get('/callback', async (req, res) => {
-//   const code = req.query.code || null;
-//   const state = req.query.state || null;
-
-//   if (!code || !state) {
-//     return res.redirect('/error?error=state_mismatch');
-//   }
-
-//   try {
-//     const tokenResponse = await axios.post(
-//       'https://accounts.spotify.com/api/token',
-//       qs.stringify({
-//         code: code,
-//         redirect_uri: redirect_uri,
-//         grant_type: 'authorization_code',
-//       }),
-//       {
-//         headers: {
-//           Authorization: `Basic ${Buffer.from(`${spClientId}:${spClientSecret}`).toString('base64')}`,
-//           'Content-Type': 'application/x-www-form-urlencoded',
-//         },
-//       }
-//     );
-
-//     const { access_token, refresh_token } = tokenResponse.data;
-
-//     // Store tokens securely (e.g., session, database)
-//     console.log('Access Token:', access_token);
-//     console.log('Refresh Token:', refresh_token);
-
-//     // res.redirect(`/api/spAccessToken?access_token=${access_token}&refresh_token=${refresh_token}`);
-//     res.redirect(`/api/refresh_token=${refresh_token}`);
-//   } catch (error) {
-//     console.error('Error exchanging code for token:', error.message);
-//     res.redirect('/error?error=token_exchange_failed');
-//   }
-// }); 
   
 // Endpoint to create a playlist and add tracks
 app.post('/create-playlist', async (req, res) => {
