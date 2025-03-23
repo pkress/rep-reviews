@@ -24,10 +24,7 @@ const spClientId = process.env.SPCLIENTID
 const spClientSecret = process.env.SPCLIENTSECRET 
 const spRefreshToken = process.env.SPREFRESHTOKEN
 const spUserID = process.env.SPUSERID
-const auth_token = Buffer.from(spClientId + ":" + spClientSecret).toString("base64"); 
-const redirect_uri = process.env.REDIRECT_URI || 'http://localhost:3001/callback'; 
-
-const generateRandomString = (length) => crypto.randomBytes(length).toString('hex');
+const auth_token = Buffer.from(spClientId + ":" + spClientSecret).toString("base64");  
 
 // Basic welcome response
 app.get("/api", (req, res) => {
@@ -101,7 +98,7 @@ app.get("/api/spAccessTokenClient", (req, res) => {
 });
   
 // Endpoint to create a playlist and add tracks
-app.post('/create-playlist', async (req, res) => {
+app.post('/api/create-playlist', async (req, res) => {
   // console.log('Request:', req);
   // console.log('Request body:', req.body);  
 
