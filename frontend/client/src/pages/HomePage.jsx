@@ -87,14 +87,14 @@ const HomePage = () => {
               <div className="step">
                 <div className="step-number">2</div>
                 <div className="step-line"></div>
-                <h3 className="step-title">Tue-Thu: Review your Assignment</h3>
-                <p className="step-desc">Submitted releases are assigned to the community to review</p>
+                <h3 className="step-title">Tue-Thu: Complete Reviews</h3>
+                <p className="step-desc">Releases are assigned to the community to review</p>
               </div> 
               
               <div className="step">
                 <div className="step-number">3</div>
                 <h3 className="step-title"> Enjoy the Fruits of your Labor!</h3>
-                <p className="step-desc">Find great new music and explore the new harvest of representative reviews</p>
+                <p className="step-desc">Find great new music and browse published reviews</p>
               </div>
             </div>
             

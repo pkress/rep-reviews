@@ -876,6 +876,7 @@ select:focus {
   text-align: center;
 }
 
+/* How It Works Section */
 .how-it-works {
   background-color: rgba(31, 41, 55, 0.5);
   border: 1px solid rgba(75, 85, 99, 0.5);
@@ -898,17 +899,12 @@ select:focus {
   gap: 1.5rem;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .steps {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
-
-@media (min-width: 1024px) {
-  .steps {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
+ 
 
 .step {
   position: relative;
@@ -946,8 +942,7 @@ select:focus {
   left: 50%;
   width: 100%;
   height: 1px;
-  background-color: rgba(75, 85, 99, 0.5);
-  transform: translateX(50%);
+  background-color: rgba(75, 85, 99, 0.5); 
   display: none;
 }
 
@@ -956,11 +951,7 @@ select:focus {
     display: block;
   }
 }
-
-.step:last-child .step-line {
-  display: none;
-}
-
+ 
 /* Button styles that work with your existing theme */
 .btn-primary {
   background-color: var(--color-primary);
