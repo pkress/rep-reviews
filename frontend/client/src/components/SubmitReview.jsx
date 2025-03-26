@@ -13,9 +13,42 @@ const SubmitReview = ({ session }) => {
     reviewText: ''
   });
   
+  // Unique key for this user's current assignment
+  const [storageKey, setStorageKey] = useState(null);
+  
   useEffect(() => {
-    fetchAssignment();
+    if (session) {
+      fetchAssignment();
+    }
   }, [session]);
+
+  // Load saved form data from localStorage when assignment is loaded
+  useEffect(() => {
+    if (assignment && assignment.release_id) {
+      // Create a unique key for this user's current assignment
+      const key = `review_draft_${session.user.id}_${assignment.release_id}`;
+      setStorageKey(key);
+      
+      // Try to load saved form data
+      const savedData = localStorage.getItem(key);
+      if (savedData) {
+        try {
+          const parsedData = JSON.parse(savedData);
+          setFormData(parsedData);
+        } catch (e) {
+          console.error('Error parsing saved review data', e);
+        }
+      }
+    }
+  }, [assignment, session]);
+
+  // Save form data to localStorage whenever it changes
+  useEffect(() => {
+    if (storageKey && formData) {
+      localStorage.setItem(storageKey, JSON.stringify(formData));
+    }
+  }, [formData, storageKey]);
+
 
   const fetchAssignment = async () => {
     if (!session) return;
@@ -106,6 +139,11 @@ const SubmitReview = ({ session }) => {
         .eq('assignment_id', assignment.assignment_id);
       
       if (updateError) throw updateError;
+      
+      // On successful submission, clear the saved draft
+      if (storageKey) {
+        localStorage.removeItem(storageKey);
+      }
 
       alert('Review submitted successfully!');
       window.location.reload();

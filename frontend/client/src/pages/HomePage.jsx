@@ -80,28 +80,21 @@ const HomePage = () => {
               <div className="step">
                 <div className="step-number">1</div>
                 <div className="step-line"></div>
-                <h3 className="step-title">Submit Releases</h3>
-                <p className="step-desc">Submit up to 5 new releases each week</p>
+                <h3 className="step-title">Fri-Mon: Submit Releases</h3>
+                <p className="step-desc">Submit up to 5 releases from the previous week</p>
               </div>
               
               <div className="step">
                 <div className="step-number">2</div>
                 <div className="step-line"></div>
-                <h3 className="step-title">Get Assigned</h3>
-                <p className="step-desc">Receive an album to review from the submissions</p>
-              </div>
+                <h3 className="step-title">Tue-Thu: Review your Assignment</h3>
+                <p className="step-desc">Submitted releases are assigned to the community to review</p>
+              </div> 
               
               <div className="step">
                 <div className="step-number">3</div>
-                <div className="step-line"></div>
-                <h3 className="step-title">Write Reviews</h3>
-                <p className="step-desc">Score and recommend albums you're assigned</p>
-              </div>
-              
-              <div className="step">
-                <div className="step-number">4</div>
-                <h3 className="step-title">Access Reports</h3>
-                <p className="step-desc">See what the community thinks of each release</p>
+                <h3 className="step-title"> Enjoy the Fruits of your Labor!</h3>
+                <p className="step-desc">Find great new music and explore the new harvest of representative reviews</p>
               </div>
             </div>
             
