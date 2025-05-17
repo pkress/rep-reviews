@@ -55,6 +55,9 @@ function AssignReviewers({ session }) {
       }
 
       // Randomly assign a release to user
+      // set seed to current time
+      const seed = new Date().getTime();
+      // Randomly select a release from the list
       const rand = Math.floor(Math.random() * data.length); 
       const assigned_release = data[rand]['release_id'];  
        

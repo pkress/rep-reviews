@@ -92,6 +92,7 @@ export default function ReportsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const session = useSession();
+  
 
   // Fetch available weeks
   useEffect(() => {
@@ -129,33 +130,44 @@ export default function ReportsPage() {
   // Check permissions and fetch releases when week changes
   useEffect(() => {
     async function checkPermissionAndFetchReleases() {
-      if (!session || !selectedWeek) return;
-      
-      setLoading(true);
-      setError(null);
-      
-      try {
-        // Check if user has reviewed for selected week
-        const { data: reviewData, error: reviewError } = await supabase
-          .from('reviews')
-          .select(`
-            review_id, 
-            releases!inner (
-              release_week
-            )
-          `)
-          .eq('releases.release_week', dateFormatters.toISOString(new Date(selectedWeek)))
-          .eq('user_id', session.user.id);
+    if (!session || !selectedWeek) return;
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Check if user has reviewed for selected week
+      const { data: reviewData, error: reviewError } = await supabase
+        .from('reviews')
+        .select(`
+          review_id, 
+          releases!inner (
+            release_week
+          )
+        `)
+        .eq('releases.release_week', dateFormatters.toISOString(new Date(selectedWeek)))
+        .eq('user_id', session.user.id);
 
-        const hasPermission = !reviewError && reviewData && reviewData.length > 0;
-        const isNotLatestWeek = availableWeeks.length > 0 && 
-          dateFormatters.toISOString(new Date(selectedWeek)) !== 
-          dateFormatters.toISOString(new Date(availableWeeks[0]?.release_week));
+      const hasReviewed = !reviewError && reviewData && reviewData.length > 0;
+      
+      const isNotLatestWeek = availableWeeks.length > 0 && 
+        dateFormatters.toISOString(new Date(selectedWeek)) !== 
+        dateFormatters.toISOString(new Date(availableWeeks[0]?.release_week));
+      
+      // Check if it's Friday or later (5 = Friday, 6 = Saturday, 0 = Sunday)
+      const currentDay = new Date().getDay();
+      const isReviewPeriodOver = currentDay >= 5 || currentDay === 0;
+      
+      // Only allow viewing if:
+      // 1. It's not the latest week, OR
+      // 2. The user has reviewed AND it's Friday or later
+      const canView = isNotLatestWeek || (hasReviewed && isReviewPeriodOver);
+      
+      setCanViewLatestWeek(canView);
 
-        setCanViewLatestWeek(hasPermission || isNotLatestWeek);
 
         // Fetch releases if user has permission
-        if (hasPermission || isNotLatestWeek) {
+        if (canView) {
           // Get all releases for the week
           const { data: releases, error: releasesError } = await supabase
             .from('releases')
@@ -316,7 +328,7 @@ export default function ReportsPage() {
       
       {!canViewLatestWeek && selectedWeek === availableWeeks[0]?.release_week ? (
         <div className="bg-blue-900/30 border border-blue-600 text-blue-200 px-4 py-3 rounded-lg mb-6">
-          <p>You'll be able to see the weekly report after you've submitted your review for this week.</p>
+          <p>Weekly reports for the current week will be available on Friday when the review period ends.</p>
         </div>
       ) : loading ? (
         <LoadingSpinner message="Loading report data..." />
