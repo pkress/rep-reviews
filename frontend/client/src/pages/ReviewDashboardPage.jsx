@@ -121,7 +121,9 @@ const ReviewDashboard = () => {
         <>
           <DashboardWelcome 
             username={username} 
-            message="It's Submission Time!" 
+            message="It's Submission Time!"
+            phase={phase}
+
           />
           <ReleaseSubmissionForm session={session} />
         </>
@@ -134,6 +136,7 @@ const ReviewDashboard = () => {
           <DashboardWelcome 
             username={username} 
             message="It's Review Time!" 
+            phase={phase}
           />
           <AssignReviewers session={session} />
         </>
@@ -146,6 +149,7 @@ const ReviewDashboard = () => {
           <DashboardWelcome 
             username={username} 
             message="You've finished your assignment! Let's party!" 
+            phase={null}
           />
           <div className="text-center mt-8">
             <Link 
@@ -164,6 +168,7 @@ const ReviewDashboard = () => {
         <DashboardWelcome 
           username={username} 
           message="It's Review Time!" 
+          phase={phase}
         />
         <SubmitReview session={session} />
       </>
