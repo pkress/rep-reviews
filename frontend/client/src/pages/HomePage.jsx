@@ -25,8 +25,7 @@ const HomePage = () => {
         {/* Main Content */}
         <div className="container">
           {session ? (
-            <div className="text-center" style={{marginBottom: '4rem'}}>
-              <h2 className="text-xl font-semibold" style={{marginBottom: '1.5rem'}}>Welcome back!</h2>
+            <div className="text-center" style={{marginBottom: '4rem'}}> 
               <div style={{display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center'}}>
                 <Link to="/dashboard" className="btn-primary">
                   <Music className="btn-icon" size={20} />
